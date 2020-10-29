@@ -62,6 +62,19 @@ kubectl -n argocd patch secret argocd-secret \
 argocd cluster add $(kubectl config current-context)
 ```
 
+## Build and push demo-app Docker image
+
+```shell
+cd ./demo-app
+./build-push.sh
+```
+
+## Add demo-app to ArgoCD
+
+```shell
+argocd app create spring-petclinic --repo https://github.com/anthonyvetter/argocd-getting-started.git --path . --dest-server $MINIKUBE_IP --dest-namespace default
+```
+
 ## Uninstall Argo CD
 
 ```shell
