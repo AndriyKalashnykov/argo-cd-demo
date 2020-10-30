@@ -72,7 +72,14 @@ cd ./demo-app
 ## Add demo-app to ArgoCD
 
 ```shell
-argocd app create spring-petclinic --repo https://github.com/anthonyvetter/argocd-getting-started.git --path . --dest-server $MINIKUBE_IP --dest-namespace default
+kubectl create ns spring-petclinic
+argocd app create spring-petclinic --repo https://github.com/AndriyKalashnykov/argo-cd-demo.git --path ./demo-app --dest-server https://kubernetes.default.svc --dest-namespace spring-petclinic
+argocd app create spring-petclinic --repo https://github.com/AndriyKalashnykov/argo-cd-demo.git --path ./demo-app --dest-server https://35.185.101.202 --dest-namespace spring-petclinic
+argocd app sync spring-petclinic
+argocd app list
+argocd cluster list
+
+argocd app delete spring-petclinic
 ```
 
 ## Uninstall Argo CD
