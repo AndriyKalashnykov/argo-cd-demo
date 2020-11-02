@@ -85,10 +85,10 @@ argocd repo add https://github.com/argoproj/argocd-example-apps --username <user
 ## Add demo-app to ArgoCD
 
 ```shell
-argocd app create spring-petclinic-dev --repo https://github.com/AndriyKalashnykov/argo-cd-demo.git --path ./demo-app --dest-name gke2 --dest-namespace spring-petclinic --revision dev -sync-policy automated
+argocd app create spring-petclinic-dev --repo https://github.com/AndriyKalashnykov/argo-cd-demo.git --path ./demo-app --dest-name gke2 --dest-namespace spring-petclinic --revision dev --sync-policy automated
 argocd app sync spring-petclinic-dev
 
-argocd app create spring-petclinic-main --repo https://github.com/AndriyKalashnykov/argo-cd-demo.git --path ./demo-app --dest-name gke --dest-namespace spring-petclinic --revision main -sync-policy automated
+argocd app create spring-petclinic-main --repo https://github.com/AndriyKalashnykov/argo-cd-demo.git --path ./demo-app --dest-name gke --dest-namespace spring-petclinic --revision main --sync-policy automated
 argocd app sync spring-petclinic-main
 
 argocd app list
