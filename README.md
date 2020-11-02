@@ -65,6 +65,8 @@ argocd cluster add $(kubectl config current-context)
 kubectx gke2
 argocd cluster add $(kubectl config current-context)
 argocd cluster list
+
+minikube-cluster-1
 ```
 
 ## Build and push demo-app Docker image
@@ -74,20 +76,27 @@ cd ./demo-app
 ./build-push.sh
 ```
 
+## Connect to a private Git Repo
+
+```shell
+argocd repo add https://github.com/argoproj/argocd-example-apps --username <username> --password <token>
+```
+
 ## Add demo-app to ArgoCD
 
 ```shell
-kubectl create ns spring-petclinic
-argocd app create spring-petclinic --repo https://github.com/AndriyKalashnykov/argo-cd-demo.git --path ./demo-app --dest-name gke2 --dest-namespace spring-petclinic
-argocd app sync spring-petclinic
+argocd app create spring-petclinic-dev --repo https://github.com/AndriyKalashnykov/argo-cd-demo.git --path ./demo-app --dest-name gke2 --dest-namespace spring-petclinic
+argocd app sync spring-petclinic-dev
 
-argocd app create spring-petclinic --repo https://github.com/AndriyKalashnykov/argo-cd-demo.git --path ./demo-app --dest-server https://kubernetes.default.svc --dest-namespace spring-petclinic
-argocd app create spring-petclinic --repo https://github.com/AndriyKalashnykov/argo-cd-demo.git --path ./demo-app --dest-server https://35.185.101.202 --dest-namespace spring-petclinic
+argocd app create spring-petclinic-stage --repo https://github.com/AndriyKalashnykov/argo-cd-demo.git --path ./demo-app --dest-name gke --dest-namespace spring-petclinic
+argocd app sync spring-petclinic-stage
 
 argocd app list
 
+argocd app delete spring-petclinic-dev
+argocd app delete spring-petclinic-stage
 
-argocd app delete spring-petclinic
+argocd app patch myapplication --patch '{"spec": { "source": { "targetRevision": "master" } }}' --type merge
 ```
 
 ## Uninstall Argo CD
@@ -97,3 +106,8 @@ kubectl delete -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v
 # kubectl delete -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 kubectl -n argocd get all
 ```
+
+### Support multiple clusters (destinations) for an Application in Argo CD
+
+* [support multiple clusters](https://github.com/argoproj/argo-cd/issues/1673)
+* [Proposal & Proof of Concept: Dynamically Generate Applications for Clusters Based On Label Selectors](https://github.com/argoproj/argo-cd/issues/3403)
