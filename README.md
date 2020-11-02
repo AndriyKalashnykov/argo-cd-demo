@@ -5,7 +5,7 @@
 * [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 * [argocd cli](https://argoproj.github.io/argo-cd/cli_installation/)
 
-## Install  Argo CD CLI for Mac
+## Install Argo CD CLI for Mac
 
 ```shell
 brew tap argoproj/tap && brew install argoproj/tap/argocd
@@ -60,7 +60,11 @@ kubectl -n argocd patch secret argocd-secret \
 ## Add Kubernetes cluster to Argo CD
 
 ```shell
+kubectx gke
 argocd cluster add $(kubectl config current-context)
+kubectx gke2
+argocd cluster add $(kubectl config current-context)
+argocd cluster list
 ```
 
 ## Build and push demo-app Docker image
@@ -74,11 +78,14 @@ cd ./demo-app
 
 ```shell
 kubectl create ns spring-petclinic
+argocd app create spring-petclinic --repo https://github.com/AndriyKalashnykov/argo-cd-demo.git --path ./demo-app --dest-name gke2 --dest-namespace spring-petclinic
+argocd app sync spring-petclinic
+
 argocd app create spring-petclinic --repo https://github.com/AndriyKalashnykov/argo-cd-demo.git --path ./demo-app --dest-server https://kubernetes.default.svc --dest-namespace spring-petclinic
 argocd app create spring-petclinic --repo https://github.com/AndriyKalashnykov/argo-cd-demo.git --path ./demo-app --dest-server https://35.185.101.202 --dest-namespace spring-petclinic
-argocd app sync spring-petclinic
+
 argocd app list
-argocd cluster list
+
 
 argocd app delete spring-petclinic
 ```
