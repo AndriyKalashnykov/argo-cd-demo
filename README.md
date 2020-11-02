@@ -115,8 +115,8 @@ kubectl -n argocd get all
 ### Branching
 
 ```shell
-git checkout master
-git checkout -b dev master
+git checkout main
+git checkout -b dev main
 git checkout dev
 git push origin dev
 ```
