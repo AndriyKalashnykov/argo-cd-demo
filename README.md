@@ -5,7 +5,7 @@
 * [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 * [argocd cli](https://argoproj.github.io/argo-cd/cli_installation/)
 
-## Install and set up the ArgoCD CLI
+## Install  Argo CD CLI for Mac
 
 ```shell
 brew tap argoproj/tap && brew install argoproj/tap/argocd
