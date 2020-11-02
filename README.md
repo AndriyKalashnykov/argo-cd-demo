@@ -119,4 +119,8 @@ git checkout main
 git checkout -b dev main
 git checkout dev
 git push origin dev
+...
+git checkout dev
+git merge main
+git push --set-upstream origin dev
 ```
