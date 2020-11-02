@@ -85,10 +85,10 @@ argocd repo add https://github.com/argoproj/argocd-example-apps --username <user
 ## Add demo-app to ArgoCD
 
 ```shell
-argocd app create spring-petclinic-dev --repo https://github.com/AndriyKalashnykov/argo-cd-demo.git --path ./demo-app --dest-name gke2 --dest-namespace spring-petclinic
+argocd app create spring-petclinic-dev --repo https://github.com/AndriyKalashnykov/argo-cd-demo.git --path ./demo-app --dest-name gke2 --dest-namespace spring-petclinic --revision dev
 argocd app sync spring-petclinic-dev
 
-argocd app create spring-petclinic-stage --repo https://github.com/AndriyKalashnykov/argo-cd-demo.git --path ./demo-app --dest-name gke --dest-namespace spring-petclinic
+argocd app create spring-petclinic-stage --repo https://github.com/AndriyKalashnykov/argo-cd-demo.git --path ./demo-app --dest-name gke --dest-namespace spring-petclinic --revision main
 argocd app sync spring-petclinic-stage
 
 argocd app list
@@ -111,3 +111,12 @@ kubectl -n argocd get all
 
 * [support multiple clusters](https://github.com/argoproj/argo-cd/issues/1673)
 * [Proposal & Proof of Concept: Dynamically Generate Applications for Clusters Based On Label Selectors](https://github.com/argoproj/argo-cd/issues/3403)
+
+### Branching
+
+```shell
+git checkout master
+git checkout -b dev master
+git checkout dev
+git push origin dev
+```
