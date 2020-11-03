@@ -65,8 +65,6 @@ argocd cluster add $(kubectl config current-context)
 kubectx gke2
 argocd cluster add $(kubectl config current-context)
 argocd cluster list
-
-minikube-cluster-1
 ```
 
 ## Build and push demo-app Docker image
