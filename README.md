@@ -148,10 +148,10 @@ kubectl get pods,deploy,replica,svc -n spring-petclinic
 ### Add demo-app to ArgoCD with Kustomize
 
 ```shell
-argocd app create spring-petclinic-dev-kustomize --repo https://github.com/AndriyKalashnykov/argo-cd-demo.git --path demo-app/kustomize/overlays/dev/ --dest-name gke2 --dest-namespace dev-spring-petclinic --revision kustom --sync-policy automated
+argocd app create spring-petclinic-dev-kustomize --repo https://github.com/AndriyKalashnykov/argo-cd-demo.git --path demo-app/kustomize/overlays/dev/ --dest-name gke2 --dest-namespace spring-petclinic --revision kustom --sync-policy automated --auto-prune
 argocd app sync spring-petclinic-dev-kustomize
 
-argocd app create spring-petclinic-prod-kustomize --repo https://github.com/AndriyKalashnykov/argo-cd-demo.git --path demo-app/kustomize/overlays/prod --dest-name gke --dest-namespace spring-petclinic --revision kustom --sync-policy automated
+argocd app create spring-petclinic-prod-kustomize --repo https://github.com/AndriyKalashnykov/argo-cd-demo.git --path demo-app/kustomize/overlays/prod --dest-name gke --dest-namespace spring-petclinic --revision kustom --sync-policy automated --auto-prune
 argocd app sync spring-petclinic-prod-kustomize
 
 argocd app list
