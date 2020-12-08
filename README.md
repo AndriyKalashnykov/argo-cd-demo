@@ -106,3 +106,7 @@ kubectl delete -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v
 # kubectl delete -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 kubectl -n argocd get all
 ```
+
+### Jenkins pipeline Git push
+
+* [jenkins git push](https://stackoverflow.com/questions/53325544/jenkins-pipeline-git-push)
