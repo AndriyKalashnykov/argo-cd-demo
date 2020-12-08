@@ -57,7 +57,7 @@ kubectl -n argocd patch secret argocd-secret \
   }}'
 ```
 
-## Add Kubernetes cluster to Argo CD
+## Add Kubernetes cluster
 
 ```shell
 kubectx gke
@@ -67,55 +67,36 @@ argocd cluster add $(kubectl config current-context)
 argocd cluster list
 ```
 
-## Build and push demo-app Docker image
+### Kustomize dry run
 
 ```shell
-cd ./demo-app
-./build-push.sh
+kustomize build demo-app/kustomize/overlays/dev
+kustomize build demo-app/kustomize/overlays/prod
 ```
 
-## Connect to a private Git Repo
+### Apply Kustomized templates
 
 ```shell
-argocd repo add https://github.com/argoproj/argocd-example-apps --username <username> --password <token>
+kustomize build demo-app/kustomize/overlays/dev | kubectl apply -f-
+kubectl get pods,deploy,replica,svc -n spring-petclinic-dev
 ```
 
-### Branching
+### Add demo-app to ArgoCD with Kustomize
 
 ```shell
-git checkout main
-git checkout -b dev main
-git checkout dev
-git push origin dev
-...
-git checkout dev
-git merge main
-git push --set-upstream origin dev
-```
+argocd app create spring-petclinic-dev-kustomize --repo https://github.com/AndriyKalashnykov/argo-cd-demo.git --path demo-app/kustomize/overlays/dev/ --dest-name gke2 --revision kustom --sync-policy automated --auto-prune
 
-## Add demo-app to ArgoCD
-
-```shell
-argocd app create spring-petclinic-dev --repo https://github.com/AndriyKalashnykov/argo-cd-demo.git --path ./demo-app --dest-name gke2 --dest-namespace spring-petclinic --revision dev --sync-policy automated
-argocd app sync spring-petclinic-dev
-
-argocd app create spring-petclinic-prod --repo https://github.com/AndriyKalashnykov/argo-cd-demo.git --path ./demo-app --dest-name gke --dest-namespace spring-petclinic --revision main --sync-policy automated
-argocd app sync spring-petclinic-prod
+argocd app create spring-petclinic-prod-kustomize --repo https://github.com/AndriyKalashnykov/argo-cd-demo.git --path demo-app/kustomize/overlays/prod --dest-name gke --revision kustom --sync-policy automated --auto-prune
 
 argocd app list
 
-argocd app set spring-petclinic-dev --sync-policy automated
-argocd app set spring-petclinic-prod --sync-policy automated
-
 kubectl config use-context gke2
-kubectl get pod -n spring-petclinic
+kubectl get all -n spring-petclinic-dev
 kubectl config use-context gke
-kubectl get pod -n spring-petclinic
+kubectl get all -n spring-petclinic-prod
 
-argocd app delete spring-petclinic-dev
-argocd app delete spring-petclinic-prod
-
-argocd app patch myapplication --patch '{"spec": { "source": { "targetRevision": "master" } }}' --type merge
+argocd app delete spring-petclinic-dev-kustomize
+argocd app delete spring-petclinic-main-kustomize
 ```
 
 ## Uninstall Argo CD
@@ -124,43 +105,4 @@ argocd app patch myapplication --patch '{"spec": { "source": { "targetRevision":
 kubectl delete -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v1.7.8/manifests/install.yaml
 # kubectl delete -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 kubectl -n argocd get all
-```
-
-### Support multiple clusters (destinations) for an Application in Argo CD
-
-* [support multiple clusters](https://github.com/argoproj/argo-cd/issues/1673)
-* [Proposal & Proof of Concept: Dynamically Generate Applications for Clusters Based On Label Selectors](https://github.com/argoproj/argo-cd/issues/3403)
-
-### Kustomize dry run
-
-```shell
-kustomize build demo-app/kustomize/overlays/dev
-kustomize build demo-app/kustomize/overlays/prod
-```
-git 
-### Apply Kustomized templates
-
-```shell
-kustomize build demo-app/kustomize/overlays/dev | kubectl apply -f-
-kubectl get pods,deploy,replica,svc -n spring-petclinic
-```
-
-### Add demo-app to ArgoCD with Kustomize
-
-```shell
-argocd app create spring-petclinic-dev-kustomize --repo https://github.com/AndriyKalashnykov/argo-cd-demo.git --path demo-app/kustomize/overlays/dev/ --dest-name gke2 --revision kustom --sync-policy automated --auto-prune
-argocd app sync spring-petclinic-dev-kustomize
-
-argocd app create spring-petclinic-prod-kustomize --repo https://github.com/AndriyKalashnykov/argo-cd-demo.git --path demo-app/kustomize/overlays/prod --dest-name gke --revision kustom --sync-policy automated --auto-prune
-argocd app sync spring-petclinic-prod-kustomize
-
-argocd app list
-
-kubectl config use-context gke2
-kubectl get pod -n spring-petclinic
-kubectl config use-context gke
-kubectl get pod -n spring-petclinic
-
-argocd app delete spring-petclinic-dev-kustomize
-argocd app delete spring-petclinic-main-kustomize
 ```
