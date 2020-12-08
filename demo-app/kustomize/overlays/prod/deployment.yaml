@@ -3,4 +3,4 @@ kind: Deployment
 metadata:
   name: spring-petclinic-deployment
 spec:
-  replicas: 2
+  replicas: 3
