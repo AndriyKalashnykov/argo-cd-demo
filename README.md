@@ -137,7 +137,7 @@ kubectl -n argocd get all
 argocd app create spring-petclinic-dev-kustomize --repo https://github.com/AndriyKalashnykov/argo-cd-demo.git --path demo-app/kustomize/overlays/dev/ --dest-name gke2 --dest-namespace spring-petclinic --revision kustom --sync-policy automated
 argocd app sync spring-petclinic-dev-kustomize
 
-argocd app create spring-petclinic-prod-kustomize --repo https://github.com/AndriyKalashnykov/argo-cd-demo.git --path demo-app/kustomize/overlays//prod --dest-name gke --dest-namespace spring-petclinic --revision kustom --sync-policy automated
+argocd app create spring-petclinic-prod-kustomize --repo https://github.com/AndriyKalashnykov/argo-cd-demo.git --path demo-app/kustomize/overlays/prod --dest-name gke --dest-namespace spring-petclinic --revision kustom --sync-policy automated
 argocd app sync spring-petclinic-prod-kustomize
 
 argocd app list

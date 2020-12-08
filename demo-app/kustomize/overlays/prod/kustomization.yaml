@@ -1,4 +1,7 @@
 resources:
 - ../../base
 namePrefix: prod-
-
+images:
+- name: spring-petclinic
+  newName: andriykalashnykov/spring-petclinic
+  newTag: "1.2"
