@@ -99,13 +99,13 @@ git push --set-upstream origin dev
 argocd app create spring-petclinic-dev --repo https://github.com/AndriyKalashnykov/argo-cd-demo.git --path ./demo-app --dest-name gke2 --dest-namespace spring-petclinic --revision dev --sync-policy automated
 argocd app sync spring-petclinic-dev
 
-argocd app create spring-petclinic-main --repo https://github.com/AndriyKalashnykov/argo-cd-demo.git --path ./demo-app --dest-name gke --dest-namespace spring-petclinic --revision main --sync-policy automated
-argocd app sync spring-petclinic-main
+argocd app create spring-petclinic-prod --repo https://github.com/AndriyKalashnykov/argo-cd-demo.git --path ./demo-app --dest-name gke --dest-namespace spring-petclinic --revision main --sync-policy automated
+argocd app sync spring-petclinic-prod
 
 argocd app list
 
 argocd app set spring-petclinic-dev --sync-policy automated
-argocd app set spring-petclinic-main --sync-policy automated
+argocd app set spring-petclinic-prod --sync-policy automated
 
 kubectl config use-context gke2
 kubectl get pod -n spring-petclinic
@@ -113,7 +113,7 @@ kubectl config use-context gke
 kubectl get pod -n spring-petclinic
 
 argocd app delete spring-petclinic-dev
-argocd app delete spring-petclinic-main
+argocd app delete spring-petclinic-prod
 
 argocd app patch myapplication --patch '{"spec": { "source": { "targetRevision": "master" } }}' --type merge
 ```
@@ -138,7 +138,7 @@ argocd app create spring-petclinic-dev-kustomize --repo https://github.com/Andri
 argocd app sync spring-petclinic-dev-kustomize
 
 argocd app create spring-petclinic-prod-kustomize --repo https://github.com/AndriyKalashnykov/argo-cd-demo.git --path demo-app/kustomize/prod --dest-name gke --dest-namespace spring-petclinic --revision kustom --sync-policy automated
-argocd app sync spring-petclinic-main-kustomize
+argocd app sync spring-petclinic-prod-kustomize
 
 argocd app list
 

@@ -1,5 +1,12 @@
 #!/bin/bash
 
+LAUNCH_DIR=$(pwd)
+SCRIPT_DIR=$(dirname $0)
+SCRIPT_PARENT_DIR="$(dirname "$SCRIPT_DIR")"
+SCRIPT_PARENT_DIR_FULL=$(pwd)
+
+cd $SCRIPT_DIR
+
 . ./set-env.sh
 
 function get_loadbalancer_ip {
@@ -39,3 +46,4 @@ argocd account update-password --insecure --server $LB_IP --account $ARGOCD_ACCO
 # add current k8s context
 argocd cluster add $(kubectl config current-context)
 
+cd $LAUNCH_DIR
