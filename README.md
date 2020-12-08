@@ -91,9 +91,9 @@ argocd app create spring-petclinic-prod-kustomize --repo https://github.com/Andr
 argocd app list
 
 kubectl config use-context gke2
-kubectl get all -n spring-petclinic-dev
+watch kubectl get all -n dev-spring-petclinic
 kubectl config use-context gke
-kubectl get all -n spring-petclinic-prod
+watch kubectl get all -n prod-spring-petclinic
 
 argocd app delete spring-petclinic-dev-kustomize
 argocd app delete spring-petclinic-main-kustomize
