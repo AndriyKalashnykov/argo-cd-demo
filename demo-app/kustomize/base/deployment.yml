@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   name: spring-petclinic
 spec:
-  replicas: 2
+  replicas: 1
   revisionHistoryLimit: 3
   selector:
     matchLabels:
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       # modify the following line with your Docker Hub account name
-      - image: index.docker.io/andriykalashnykov/spring-petclinic:latest
+      - image: spring-petclinic
         name: spring-petclinic
         ports:
         - containerPort: 8080
