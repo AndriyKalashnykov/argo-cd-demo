@@ -9,3 +9,5 @@ namespace: prod-spring-petclinic
 images:
 - name: docker.io/andriykalashnykov/spring-petclinic
   newTag: "1.1"
+patchesStrategicMerge:
+  - deployment.yaml
