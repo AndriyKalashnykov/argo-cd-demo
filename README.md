@@ -130,3 +130,23 @@ kubectl -n argocd get all
 
 * [support multiple clusters](https://github.com/argoproj/argo-cd/issues/1673)
 * [Proposal & Proof of Concept: Dynamically Generate Applications for Clusters Based On Label Selectors](https://github.com/argoproj/argo-cd/issues/3403)
+
+### Add demo-app to ArgoCD with Kustomize
+
+```shell
+argocd app create spring-petclinic-dev-kustomize --repo https://github.com/AndriyKalashnykov/argo-cd-demo.git --path demo-app/kustomize/dev --dest-name gke2 --dest-namespace spring-petclinic --revision kustom --sync-policy automated
+argocd app sync spring-petclinic-dev-kustomize
+
+argocd app create spring-petclinic-prod-kustomize --repo https://github.com/AndriyKalashnykov/argo-cd-demo.git --path demo-app/kustomize/prod --dest-name gke --dest-namespace spring-petclinic --revision kustom --sync-policy automated
+argocd app sync spring-petclinic-main-kustomize
+
+argocd app list
+
+kubectl config use-context gke2
+kubectl get pod -n spring-petclinic
+kubectl config use-context gke
+kubectl get pod -n spring-petclinic
+
+argocd app delete spring-petclinic-dev-kustomize
+argocd app delete spring-petclinic-main-kustomize
+```
