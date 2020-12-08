@@ -4,6 +4,13 @@ resources:
 - ../../base
 commonLabels:
   app: spring-petclinic-dev
+configMapGenerator:
+- name: runtime-env
+  behavior: create
+  options:
+    disableNameSuffixHash: true
+  literals:
+    - RUNTIME_ENV=dev
 namePrefix: dev-
 namespace: dev-spring-petclinic
 images:
