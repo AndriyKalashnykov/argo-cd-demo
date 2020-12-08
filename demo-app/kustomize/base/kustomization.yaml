@@ -6,3 +6,4 @@ namespace: spring-petclinic
 resources:
 - ./deployment.yaml
 - ./service.yaml
+- ./ns.yaml
