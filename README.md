@@ -78,7 +78,7 @@ kustomize build demo-app/kustomize/overlays/prod
 
 ```shell
 kustomize build demo-app/kustomize/overlays/dev | kubectl apply -f-
-kubectl get pods,deploy,replica,svc -n spring-petclinic-dev
+kubectl get pods,deploy,replica,svc -n dev-spring-petclinic
 ```
 
 ### Add demo-app using Kustomize
