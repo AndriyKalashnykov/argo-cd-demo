@@ -4,7 +4,8 @@ resources:
 - ../../base
 commonLabels:
   app: spring-petclinic-prod
-# namePrefix: prod-  
+namePrefix: prod-
+namespace: prod-spring-petclinic
 images:
 - name: docker.io/andriykalashnykov/spring-petclinic
   newTag: "1.1"
