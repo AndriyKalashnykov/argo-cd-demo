@@ -110,3 +110,4 @@ kubectl -n argocd get all
 ### Jenkins pipeline Git push
 
 * [jenkins git push](https://stackoverflow.com/questions/53325544/jenkins-pipeline-git-push)
+* [alternative](https://stackoverflow.com/questions/39237910/jenkins-pipeline-cannot-check-code-into-git)
