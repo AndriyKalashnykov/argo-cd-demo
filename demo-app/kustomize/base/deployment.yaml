@@ -5,7 +5,6 @@ metadata:
   name: spring-petclinic
 spec:
   replicas: 1
-  revisionHistoryLimit: 3
   selector:
     matchLabels:
       app: spring-petclinic
@@ -15,8 +14,7 @@ spec:
         app: spring-petclinic
     spec:
       containers:
-      # modify the following line with your Docker Hub account name
-      - image: spring-petclinic
-        name: spring-petclinic
+      - name: app
+        image: docker.io/andriykalashnykov/spring-petclinic:latest
         ports:
         - containerPort: 8080

@@ -137,7 +137,7 @@ kubectl -n argocd get all
 kustomize build demo-app/kustomize/overlays/dev
 kustomize build demo-app/kustomize/overlays/prod
 ```
-
+git 
 ### Apply Kustomized templates
 
 ```shell

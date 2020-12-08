@@ -1,11 +1,9 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-resources:
-- deployment.yaml
-- service.yaml
-- ns.yaml
+commonLabels:
+  app: spring-petclinic
 namespace: spring-petclinic
-images:
-- name: spring-petclinic
-  newName: andriykalashnykov/spring-petclinic
-  newTag: "1.0"
+resources:
+- ./deployment.yaml
+- ./service.yaml
+- ./ns.yaml
