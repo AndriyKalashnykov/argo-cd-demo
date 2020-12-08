@@ -4,6 +4,7 @@ resources:
 - deployment.yaml
 - service.yaml
 - ns.yaml
+namespace: spring-petclinic
 images:
 - name: spring-petclinic
   newName: andriykalashnykov/spring-petclinic

@@ -131,6 +131,20 @@ kubectl -n argocd get all
 * [support multiple clusters](https://github.com/argoproj/argo-cd/issues/1673)
 * [Proposal & Proof of Concept: Dynamically Generate Applications for Clusters Based On Label Selectors](https://github.com/argoproj/argo-cd/issues/3403)
 
+### Kustomize dry run
+
+```shell
+kustomize build demo-app/kustomize/overlays/dev
+kustomize build demo-app/kustomize/overlays/prod
+```
+
+### Apply Kustomized templates
+
+```shell
+kustomize build demo-app/kustomize/overlays/dev | kubectl apply -f-
+kubectl get pods,deploy,replica,svc -n spring-petclinic
+```
+
 ### Add demo-app to ArgoCD with Kustomize
 
 ```shell
