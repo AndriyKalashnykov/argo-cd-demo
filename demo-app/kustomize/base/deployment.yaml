@@ -14,7 +14,7 @@ spec:
         app: spring-petclinic
     spec:
       containers:
-      - name: app
+      - name: spring-petclinic
         image: docker.io/andriykalashnykov/spring-petclinic:latest
         ports:
         - containerPort: 8080
