@@ -80,6 +80,19 @@ cd ./demo-app
 argocd repo add https://github.com/argoproj/argocd-example-apps --username <username> --password <token>
 ```
 
+### Branching
+
+```shell
+git checkout main
+git checkout -b dev main
+git checkout dev
+git push origin dev
+...
+git checkout dev
+git merge main
+git push --set-upstream origin dev
+```
+
 ## Add demo-app to ArgoCD
 
 ```shell
@@ -117,16 +130,3 @@ kubectl -n argocd get all
 
 * [support multiple clusters](https://github.com/argoproj/argo-cd/issues/1673)
 * [Proposal & Proof of Concept: Dynamically Generate Applications for Clusters Based On Label Selectors](https://github.com/argoproj/argo-cd/issues/3403)
-
-### Branching
-
-```shell
-git checkout main
-git checkout -b dev main
-git checkout dev
-git push origin dev
-...
-git checkout dev
-git merge main
-git push --set-upstream origin dev
-```
