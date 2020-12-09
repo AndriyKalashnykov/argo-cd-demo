@@ -5,7 +5,7 @@ resources:
 commonLabels:
   app: spring-petclinic-prod
 configMapGenerator:
-- name: runtime-env
+- name: runtime-env-cm
   behavior: create
   options:
     disableNameSuffixHash: true
