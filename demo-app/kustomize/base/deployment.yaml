@@ -24,7 +24,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: db-secret
-              key: db.password       
+              key: db-password       
         envFrom: 
           - configMapRef: 
               name:  runtime-env-cm
