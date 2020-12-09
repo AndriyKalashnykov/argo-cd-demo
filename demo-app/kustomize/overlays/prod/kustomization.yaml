@@ -10,7 +10,7 @@ configMapGenerator:
   options:
     disableNameSuffixHash: true
   literals:
-    - RUNTIME_ENV=PROD  
+    - RUNTIME_ENV=prod  
 namePrefix: prod-
 namespace: prod-spring-petclinic
 images:
