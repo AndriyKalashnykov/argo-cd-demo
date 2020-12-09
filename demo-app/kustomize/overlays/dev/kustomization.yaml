@@ -24,3 +24,12 @@ images:
 - name: spring-petclinic
   newName: docker.io/andriykalashnykov/spring-petclinic
   newTag: "1.2"
+patches:
+- target:
+    kind: Deployment
+    name: spring-petclinic
+  patch: |-
+    - op: replace
+      path: /spec/template/spec/containers/0/env/0/value
+      value: "1.2"
+        

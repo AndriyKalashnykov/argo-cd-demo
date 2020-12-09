@@ -13,7 +13,7 @@ configMapGenerator:
     - RUNTIME_ENV=prod
 secretGenerator:
   # options:
-  #   disableNameSuffixHash: true
+  #   disableNameSuffixHash: true  
 - literals:
   - db-password=6789
   name: db-secret
@@ -26,3 +26,11 @@ images:
   newTag: "1.1"
 patchesStrategicMerge:
   - deployment.yaml
+patches:
+- target:
+    kind: Deployment
+    name: spring-petclinic
+  patch: |-
+    - op: replace
+      path: /spec/template/spec/containers/0/env/0/value
+      value: "1.1"  
