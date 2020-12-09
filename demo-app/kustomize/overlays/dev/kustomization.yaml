@@ -7,8 +7,8 @@ commonLabels:
 configMapGenerator:
 - name: runtime-env-cm
   behavior: create
-  options:
-    disableNameSuffixHash: true
+  # options:
+  #   disableNameSuffixHash: true
   literals:
     - RUNTIME_ENV=dev
 secretGenerator:
