@@ -32,4 +32,6 @@ patches:
     - op: replace
       path: /spec/template/spec/containers/0/env/0/value
       value: "1.2"
-        
+# - op: replace
+#   path: /spec/template/metadata/annotations/environment
+#   value: Production        
