@@ -21,7 +21,7 @@ spec:
             containerPort: 8080        
         env:
         - name: VERSION
-          value: ""     
+          value: "0.0"     
         - name: POD_NAME
           valueFrom:
             fieldRef:
