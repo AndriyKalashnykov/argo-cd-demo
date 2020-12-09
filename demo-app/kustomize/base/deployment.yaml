@@ -14,11 +14,17 @@ spec:
         app: spring-petclinic
     spec:
       containers:
-      - image: spring-petclinic
-        name: spring-petclinic
+      - name: spring-petclinic
+        image: spring-petclinic
         ports:
           - name: http
-            containerPort: 8080
+            containerPort: 8080        
+        env:
+        - name: "DB_PASSWORD"
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: db.password       
         envFrom: 
           - configMapRef: 
-              name:  runtime-env  
+              name:  runtime-env-cm

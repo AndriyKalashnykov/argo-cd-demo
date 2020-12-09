@@ -10,7 +10,14 @@ configMapGenerator:
   # options:
   #   disableNameSuffixHash: true
   literals:
-    - RUNTIME_ENV=prod  
+    - RUNTIME_ENV=prod
+secretGenerator:
+  # options:
+  #   disableNameSuffixHash: true
+- literals:
+  - db-password=6789
+  name: db-secret
+  type: Opaque  
 namePrefix: prod-
 namespace: prod-spring-petclinic
 images:

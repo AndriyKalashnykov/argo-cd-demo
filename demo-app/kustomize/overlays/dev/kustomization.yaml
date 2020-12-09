@@ -5,12 +5,19 @@ resources:
 commonLabels:
   app: spring-petclinic-dev
 configMapGenerator:
-- name: runtime-env
+- name: runtime-env-cm
   behavior: create
   # options:
   #   disableNameSuffixHash: true
   literals:
     - RUNTIME_ENV=dev
+secretGenerator:
+  # options:
+  #   disableNameSuffixHash: true
+- literals:
+  - db-password=12345
+  name: db-secret
+  type: Opaque
 namePrefix: dev-
 namespace: dev-spring-petclinic
 images:
