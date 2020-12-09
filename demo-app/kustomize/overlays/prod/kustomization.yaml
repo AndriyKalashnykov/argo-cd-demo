@@ -7,14 +7,15 @@ commonLabels:
 configMapGenerator:
 - name: runtime-env
   behavior: create
-  options:
-    disableNameSuffixHash: true
+  # options:
+  #   disableNameSuffixHash: true
   literals:
     - RUNTIME_ENV=prod  
 namePrefix: prod-
 namespace: prod-spring-petclinic
 images:
-- name: docker.io/andriykalashnykov/spring-petclinic
+- name: spring-petclinic
+  newName: docker.io/andriykalashnykov/spring-petclinic
   newTag: "1.1"
 patchesStrategicMerge:
   - deployment.yaml

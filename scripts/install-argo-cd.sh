@@ -14,10 +14,10 @@ function get_loadbalancer_ip {
 }
 
 function wait_for_loadbalancer_ip {
-    echo "Waiting up to $LB_WAIT sec for '$SVC_NAME' IP. Each tick is one second."
+    echo "Waiting up to $WAIT sec for '$SVC_NAME' IP. Each tick is one second."
     set +x
         local time_in_secs=0
-        while [[ "$time_in_secs" -lt $LB_WAIT ]]; do
+        while [[ "$time_in_secs" -lt $WAIT ]]; do
             if [[ "$(get_loadbalancer_ip)" != "" ]] ; then
                 return
             fi
@@ -25,7 +25,7 @@ function wait_for_loadbalancer_ip {
             sleep 1
             printf "."
         done
-        echo "Failed to obtain Service IP after $LB_WAIT sec."
+        echo "Failed to obtain Service IP after $WAIT sec."
         exit -1
     set -x
 }

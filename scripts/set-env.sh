@@ -6,4 +6,4 @@ SVC_NAME=${2:-argocd-server}
 ARGOCD_ACCOUNT=admin
 ARGOCD_NEW_PWD=admin
 
-LB_WAIT=120
+WAIT=120
