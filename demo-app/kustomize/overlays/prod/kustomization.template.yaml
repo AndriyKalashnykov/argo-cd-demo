@@ -23,7 +23,7 @@ namespace: prod-spring-petclinic
 images:
 - name: spring-petclinic
   newName: docker.io/andriykalashnykov/spring-petclinic
-  newTag: "1.1"
+  newTag: "${IMAGE_TAG}"
 patchesStrategicMerge:
   - deployment.yaml
 patches:
@@ -33,4 +33,4 @@ patches:
   patch: |-
     - op: replace
       path: /spec/template/spec/containers/0/env/0/value
-      value: "1.1" 
+      value: "${IMAGE_TAG}" 

@@ -34,4 +34,4 @@ patches:
       value: "1.3"
 # - op: replace
 #   path: /spec/template/metadata/annotations/environment
-#   value: Production        
+#   value: dev        
