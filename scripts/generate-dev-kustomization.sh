@@ -3,6 +3,8 @@
 
 set -x
 
+IMAGE_TAG=${1:-1.3}
+
 LAUNCH_DIR=$(pwd)
 SCRIPT_DIR=$(dirname $0)
 SCRIPT_PARENT_DIR="$(dirname "$SCRIPT_DIR")"
@@ -13,10 +15,6 @@ cd $SCRIPT_DIR
 . ./set-env.sh
 
 cd $SCRIPT_PARENT_DIR_FULL/demo-app/kustomize/overlays/dev
-
-pwd
-
-IMAGE_TAG=1.3
 
 envsubst < kustomization.template.yaml > kustomization.yaml
 
