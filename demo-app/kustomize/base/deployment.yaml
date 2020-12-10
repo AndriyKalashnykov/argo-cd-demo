@@ -13,7 +13,7 @@ spec:
       labels:
         app: spring-petclinic
     spec:
-      containers:
+      containers:  
       - name: spring-petclinic
         image: spring-petclinic
         ports:
