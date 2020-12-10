@@ -2,8 +2,11 @@
 
 ## Prerequisites
 
+* [curl](https://curl.haxx.se/download.html)
+* [kustomize](https://kubectl.docs.kubernetes.io/installation/kustomize/binaries/)
 * [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
-* [argocd cli](https://argoproj.github.io/argo-cd/cli_installation/)
+* [kubectx](https://github.com/ahmetb/kubectx#installation)
+* [ArgoCD CLI](https://argoproj.github.io/argo-cd/cli_installation/)
 
 ## Install Argo CD CLI for Mac
 
@@ -65,6 +68,13 @@ argocd cluster add $(kubectl config current-context)
 kubectx gke2
 argocd cluster add $(kubectl config current-context)
 argocd cluster list
+```
+
+### Generate Kustomized templates
+
+```shell
+./scripts/generate-dev-kustomization.sh
+./scripts/generate-prod-kustomization.sh
 ```
 
 ### Kustomize dry run

@@ -1,9 +1,14 @@
 #!/bin/bash
 
-ARGOCD_VER=1.7.8
-NS_NAME=${1:-argocd}
-SVC_NAME=${2:-argocd-server}
+LATERST_ARGOCD_VERSION=$(curl --silent "https://api.github.com/repos/argoproj/argo-cd/releases/latest" | grep '"tag_name"' | sed -E 's/.*"([^"]+)".*/\1/')
+
+ARGOCD_VER=${1:-$LATERST_ARGOCD_VERSION}
+NS_NAME=${2:-argocd}
+SVC_NAME=${3:-argocd-server}
 ARGOCD_ACCOUNT=admin
 ARGOCD_NEW_PWD=admin
 
 WAIT=120
+
+echo $LATERST_ARGOCD_VERSION
+echo $ARGOCD_VER
