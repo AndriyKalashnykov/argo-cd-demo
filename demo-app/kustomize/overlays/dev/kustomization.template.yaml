@@ -1,0 +1,37 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- ../../base
+commonLabels:
+  app: spring-petclinic-dev
+configMapGenerator:
+- name: runtime-env-cm
+  behavior: create
+  # options:
+  #   disableNameSuffixHash: true
+  literals:
+    - RUNTIME_ENV=dev
+secretGenerator:
+  # options:
+  #   disableNameSuffixHash: true
+- literals:
+  - db-password=12345
+  name: db-secret
+  type: Opaque
+namePrefix: dev-
+namespace: dev-spring-petclinic
+images:
+- name: spring-petclinic
+  newName: docker.io/andriykalashnykov/spring-petclinic
+  newTag: "${IMAGE_TAG}"
+patches:
+- target:
+    kind: Deployment
+    name: spring-petclinic
+  patch: |-
+    - op: replace
+      path: /spec/template/spec/containers/0/env/0/value
+      value: "${IMAGE_TAG}"
+# - op: replace
+#   path: /spec/template/metadata/annotations/environment
+#   value: Production        
