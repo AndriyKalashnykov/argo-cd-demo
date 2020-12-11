@@ -2,6 +2,8 @@
 
 LATERST_ARGOCD_VERSION=$(curl --silent "https://api.github.com/repos/argoproj/argo-cd/releases/latest" | grep '"tag_name"' | sed -E 's/.*"([^"]+)".*/\1/')
 
+# ./install-argo-cd.sh v1.7.11 
+
 ARGOCD_VER=${1:-$LATERST_ARGOCD_VERSION}
 NS_NAME=${2:-argocd}
 SVC_NAME=${3:-argocd-server}

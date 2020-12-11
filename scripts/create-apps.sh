@@ -1,15 +1,12 @@
 #!/bin/bash
 
-set -x
+# set -x
 
-LAUNCH_DIR=$(pwd)
-SCRIPT_DIR=$(dirname $0)
-SCRIPT_PARENT_DIR="$(dirname "$SCRIPT_DIR")"
-SCRIPT_PARENT_DIR_FULL=$(pwd)
+LAUNCH_DIR=$(pwd); SCRIPT_DIR=$(dirname $0); cd $SCRIPT_DIR; SCRIPT_DIR=$(pwd); cd ..; SCRIPT_PARENT_DIR=$(pwd)
+# echo LAUNCH_DIR=$LAUNCH_DIR; echo SCRIPT_DIR=$SCRIPT_DIR; echo SCRIPT_PARENT_DIR=$SCRIPT_PARENT_DIR
+. $SCRIPT_DIR/set-env.sh
 
-cd $SCRIPT_DIR
-
-. ./set-env.sh
+cd $SCRIPT_PARENT_DIR
 
 argocd app create spring-petclinic-dev-kustomize --repo https://github.com/AndriyKalashnykov/argo-cd-demo.git --path demo-app/kustomize/overlays/dev/ --dest-name gke2 --revision kustom --sync-policy automated --auto-prune --self-heal
 

@@ -1,13 +1,12 @@
 #!/bin/bash
 
-LAUNCH_DIR=$(pwd)
-SCRIPT_DIR=$(dirname $0)
-SCRIPT_PARENT_DIR="$(dirname "$SCRIPT_DIR")"
-SCRIPT_PARENT_DIR_FULL=$(pwd)
+# set -x
 
-cd $SCRIPT_DIR
+LAUNCH_DIR=$(pwd); SCRIPT_DIR=$(dirname $0); cd $SCRIPT_DIR; SCRIPT_DIR=$(pwd); cd ..; SCRIPT_PARENT_DIR=$(pwd)
+# echo LAUNCH_DIR=$LAUNCH_DIR; echo SCRIPT_DIR=$SCRIPT_DIR; echo SCRIPT_PARENT_DIR=$SCRIPT_PARENT_DIR
+. $SCRIPT_DIR/set-env.sh
 
-. ./set-env.sh
+cd $SCRIPT_PARENT_DIR
 
 function get_loadbalancer_ip {
     kubectl get service $SVC_NAME -n $NS_NAME -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
@@ -31,7 +30,7 @@ function wait_for_loadbalancer_ip {
 }
 
 kubectl create namespace $NS_NAME
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v$ARGOCD_VER/manifests/install.yaml
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/$ARGOCD_VER/manifests/install.yaml
 kubectl wait --for=condition=Ready pods --all -n $NS_NAME
 
 kubectl get svc $SVC_NAME -n $NS_NAME -o yaml |sed 's/ClusterIP/LoadBalancer/' |kubectl replace -f -

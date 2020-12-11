@@ -1,20 +1,12 @@
-
 #!/bin/bash
 
-set -x
+# set -x
 
-IMAGE_TAG=${1:-1.3}
+LAUNCH_DIR=$(pwd); SCRIPT_DIR=$(dirname $0); cd $SCRIPT_DIR; SCRIPT_DIR=$(pwd); cd ..; SCRIPT_PARENT_DIR=$(pwd)
+# echo LAUNCH_DIR=$LAUNCH_DIR; echo SCRIPT_DIR=$SCRIPT_DIR; echo SCRIPT_PARENT_DIR=$SCRIPT_PARENT_DIR
+. $SCRIPT_DIR/set-env.sh
 
-LAUNCH_DIR=$(pwd)
-SCRIPT_DIR=$(dirname $0)
-SCRIPT_PARENT_DIR="$(dirname "$SCRIPT_DIR")"
-SCRIPT_PARENT_DIR_FULL=$(pwd)
-
-cd $SCRIPT_DIR
-
-. ./set-env.sh
-
-cd $SCRIPT_PARENT_DIR_FULL/demo-app/kustomize/overlays/dev
+cd $SCRIPT_PARENT_DIR/demo-app/kustomize/overlays/dev
 
 envsubst < kustomization.template.yaml > kustomization.yaml
 
