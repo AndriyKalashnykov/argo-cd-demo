@@ -109,6 +109,12 @@ argocd app delete spring-petclinic-dev-kustomize
 argocd app delete spring-petclinic-prod-kustomize
 ```
 
+## Edit ArgoCD config
+
+```bash
+kubectl -n argocd edit cm argocd-cm
+```
+
 ## Uninstall Argo CD
 
 ```shell
