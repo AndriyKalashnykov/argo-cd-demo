@@ -12,4 +12,8 @@ kubectl delete -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/$
 # kubectl delete -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 kubectl -n $NS_NAME get all
 
+kubectl delete -f k8s/ -n $NS_NAME
+# gcloud compute addresses delete argocd-ip --global --quiet
+# gcloud compute addresses delete argocd-ip --region us-east1  --quiet
+
 cd $LAUNCH_DIR

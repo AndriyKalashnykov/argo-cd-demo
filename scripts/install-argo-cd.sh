@@ -29,6 +29,12 @@ function wait_for_loadbalancer_ip {
     set -x
 }
 
+# gcloud compute addresses create argocd-ip --global
+# gcloud compute addresses describe argocd-ip --global
+# gcloud compute addresses create argocd-ip --region us-east1
+# gcloud compute addresses describe argocd-ip --region us-east1
+# gcloud compute addresses list
+
 kubectl create namespace $NS_NAME
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/$ARGOCD_VER/manifests/install.yaml
 kubectl wait --for=condition=Ready pods --all -n $NS_NAME
@@ -36,10 +42,16 @@ kubectl wait --for=condition=Ready pods --all -n $NS_NAME
 kubectl get svc $SVC_NAME -n $NS_NAME -o yaml |sed 's/ClusterIP/LoadBalancer/' |kubectl replace -f -
 wait_for_loadbalancer_ip
 LB_IP=$(kubectl get svc $SVC_NAME -n $NS_NAME  -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-echo -e "\nLB_IP=$LB_IP"
 
+kubectl apply -f k8s/ -n $NS_NAME
+# LB_IP=$(gcloud compute addresses describe argocd-ip --global --format='value(address)')
+# sleep 60
+
+echo -e "\nLB_IP=$LB_IP"
 ARGOCD_PWD=$(kubectl get pods -n argocd -l app.kubernetes.io/name=$SVC_NAME -o name | cut -d'/' -f 2)
-argocd login $LB_IP --insecure --username $ARGOCD_ACCOUNT --password $ARGOCD_PWD
+echo "old ARGOCD_PWD=$ARGOCD_PWD"
+
+argocd login $LB_IP --insecure --username $ARGOCD_ACCOUNT --password $ARGOCD_PWD --grpc-web
 argocd account update-password --insecure --server $LB_IP --account $ARGOCD_ACCOUNT --current-password $ARGOCD_PWD --new-password $ARGOCD_NEW_PWD
 
 # add current k8s context
