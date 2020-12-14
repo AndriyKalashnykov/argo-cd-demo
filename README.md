@@ -154,6 +154,16 @@ data:
     g, $USER, role:$DEV_TEAM
 ```
 
+### Validation
+
+```shell
+# Validate policy file
+docker run --rm -it -w /src -v $(pwd):/src argoproj/argocd argocd-util rbac validate --policy-file $RBAC_POLICY_FILE
+
+# Validate if user "admin" can access proj and app "team-proj/team-app" using a kubeconfig file
+docker run --rm -it -w /src -v $(pwd):/src argoproj/argocd argocd-util rbac can admin get application 'team-proj/team-app' --policy-file $RBAC_POLICY_FILE --kubeconfig config
+```
+
 ## Uninstall Argo CD
 
 ```shell
