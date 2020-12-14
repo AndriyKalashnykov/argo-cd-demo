@@ -118,6 +118,42 @@ argocd app delete spring-petclinic-main
 argocd app patch myapplication --patch '{"spec": { "source": { "targetRevision": "master" } }}' --type merge
 ```
 
+## RBAC
+
+```shell
+DEV_TEAM=...
+CONFIG_REPO_URL=...
+DEST_CLUSTER_URL=...
+DEST_CLUSTER_NAME=
+
+argocd proj create $DEV_TEAM \
+  --src $CONFIG_REPO_URL \
+  --dest $DEST_CLUSTER_URL,$DEV_TEAM
+
+argocd app create $DEV_TEAM-app \
+  --project $DEV_TEAM \
+  --repo $CONFIG_REPO_URL \
+  --path ./demo-app \
+  --revision dev \
+  --dest-name $DEST_CLUSTER_NAME \
+  --dest-namespace $DEV_TEAM \
+  --sync-policy none
+```
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-rbac-cm
+  namespace: argocd
+data:
+  policy.csv: |
+    p, role:$DEV_TEAM, applications, get, $DEV_TEAM/*, allow
+    p, role:$DEV_TEAM, applications, sync, $DEV_TEAM/*, allow
+
+    g, $USER, role:$DEV_TEAM
+```
+
 ## Uninstall Argo CD
 
 ```shell
