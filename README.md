@@ -118,6 +118,52 @@ argocd app delete spring-petclinic-main
 argocd app patch myapplication --patch '{"spec": { "source": { "targetRevision": "master" } }}' --type merge
 ```
 
+## RBAC
+
+```shell
+DEV_TEAM=...
+CONFIG_REPO_URL=...
+DEST_CLUSTER_URL=...
+DEST_CLUSTER_NAME=
+
+argocd proj create $DEV_TEAM \
+  --src $CONFIG_REPO_URL \
+  --dest $DEST_CLUSTER_URL,$DEV_TEAM
+
+argocd app create $DEV_TEAM-app \
+  --project $DEV_TEAM \
+  --repo $CONFIG_REPO_URL \
+  --path ./demo-app \
+  --revision dev \
+  --dest-name $DEST_CLUSTER_NAME \
+  --dest-namespace $DEV_TEAM \
+  --sync-policy none
+```
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-rbac-cm
+  namespace: argocd
+data:
+  policy.csv: |
+    p, role:$DEV_TEAM, applications, get, $DEV_TEAM/*, allow
+    p, role:$DEV_TEAM, applications, sync, $DEV_TEAM/*, allow
+
+    g, $USER, role:$DEV_TEAM
+```
+
+### Validation
+
+```shell
+# Validate policy file
+docker run --rm -it -w /src -v $(pwd):/src argoproj/argocd argocd-util rbac validate --policy-file $RBAC_POLICY_FILE
+
+# Validate if user "admin" can access proj and app "team-proj/team-app" using a kubeconfig file
+docker run --rm -it -w /src -v $(pwd):/src argoproj/argocd argocd-util rbac can admin get application 'team-proj/team-app' --policy-file $RBAC_POLICY_FILE --kubeconfig config
+```
+
 ## Uninstall Argo CD
 
 ```shell
