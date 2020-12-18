@@ -1,0 +1,29 @@
+apiVersion: cert-manager.io/v1alpha3
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-nginx-prod
+spec:
+  acme:
+    email: andriykalashnykov@gmail.com
+    privateKeySecretRef:
+      name: letsencrypt-nginx-prod
+    server: https://acme-v02.api.letsencrypt.org/directory
+    solvers:
+    - http01:
+       ingress:
+         class:  nginx
+---
+apiVersion: cert-manager.io/v1alpha3
+kind: ClusterIssuer
+metadata:
+  name: lletsencrypt-nginx-stage
+spec:
+  acme:
+    email: andriykalashnykov@gmail.com
+    privateKeySecretRef:
+      name: letsencrypt-nginx-stage
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    solvers:
+    - http01:
+       ingress:
+         class:  nginx
