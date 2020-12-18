@@ -192,6 +192,7 @@ argocd app create blue-green --repo https://github.com/AndriyKalashnykov/argo-cd
 
 kubectl argo rollouts get rollouts rollout-bluegreen -w
 
+# simulate a commit
 kubectl argo rollouts set image rollout-bluegreen rollouts-demo=argoproj/rollouts-demo:green
 
 kubectl describe svc rollout-bluegreen-preview
@@ -200,9 +201,11 @@ kubectl describe svc rollout-bluegreen-active
 
 kubectl get po --show-labels
 
-kubectl argo rollouts abort rollout-bluegreen
+kubectl argo rollouts undo rollout-bluegreen
 
-kubectl argo rollouts set image rollout-bluegreen rollouts-demo=argoproj/rollouts-demo:blue
+kubectl argo rollouts set image rollout-bluegreen rollouts-demo=argoproj/rollouts-demo:green
+
+kubectl argo rollouts promote rollout-bluegreen
 ```
 
 ## Uninstall Argo CD
