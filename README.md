@@ -124,7 +124,7 @@ argocd app patch myapplication --patch '{"spec": { "source": { "targetRevision":
 DEV_TEAM=...
 CONFIG_REPO_URL=...
 DEST_CLUSTER_URL=...
-DEST_CLUSTER_NAME=
+DEST_CLUSTER_NAME=...
 
 argocd proj create $DEV_TEAM \
   --src $CONFIG_REPO_URL \
@@ -162,6 +162,47 @@ docker run --rm -it -w /src -v $(pwd):/src argoproj/argocd argocd-util rbac vali
 
 # Validate if user "admin" can access proj and app "team-proj/team-app" using a kubeconfig file
 docker run --rm -it -w /src -v $(pwd):/src argoproj/argocd argocd-util rbac can admin get application 'team-proj/team-app' --policy-file $RBAC_POLICY_FILE --kubeconfig config
+```
+
+## Rollouts
+
+### Install
+
+Controller
+
+```shell
+kubectl create namespace argo-rollouts
+kubectl apply -n argo-rollouts -f https://raw.githubusercontent.com/argoproj/argo-rollouts/stable/manifests/install.yaml
+```
+
+kubectl plugin
+
+```shell
+https://github.com/argoproj/argo-rollouts/releases/latest
+```
+
+### Blue Green Deployment
+
+```shell
+kubectl create ns blue-green
+
+DEST_CLUSTER_NAME=...
+
+argocd app create blue-green --repo https://github.com/AndriyKalashnykov/argo-cd-demo.git --path ./blue-green --dest-name $DEST_CLUSTER_NAME --dest-namespace blue-green --revision main --sync-policy automated
+
+kubectl argo rollouts get rollouts rollout-bluegreen -w
+
+kubectl argo rollouts set image rollout-bluegreen rollouts-demo=argoproj/rollouts-demo:green
+
+kubectl describe svc rollout-bluegreen-preview
+
+kubectl describe svc rollout-bluegreen-active
+
+kubectl get po --show-labels
+
+kubectl argo rollouts abort rollout-bluegreen
+
+kubectl argo rollouts set image rollout-bluegreen rollouts-demo=argoproj/rollouts-demo:blue
 ```
 
 ## Uninstall Argo CD
