@@ -39,7 +39,10 @@ kubectl -n $NGINX_NS get svc -o wide
 # Uninstall
 # kubectl delete -f https://github.com/kubernetes/ingress-nginx/blob/master/deploy/static/provider/cloud/deploy.yaml
 # kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-${NGINX_VER}/deploy/static/provider/cloud/deploy.yaml
-# kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-${NGINX_VER}/deploy/static/mandatory.yaml
+# kubectl delete -f
+# https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-${NGINX_VER}/deploy/static/mandatory.yaml
+kubectl delete -A ValidatingWebhookConfiguration test-nginx-ingress-ingress-nginx-admission
+# kubectl get -A ValidatingWebhookConfiguration
 
 # Helm --------------------------------------------------------------------------------------------------
 

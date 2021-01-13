@@ -15,5 +15,4 @@ kubectl get svc -n $NS_NAME
 kubectl get ingress argocd-ingress -n $NS_NAME
 kubectl describe ingress argocd -n $NS_NAME
 
-
 cd $LAUNCH_DIR

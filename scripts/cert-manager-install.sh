@@ -19,8 +19,39 @@ kubectl create ns $CERT_MANAGER_NS || true
 
 # Install Cert Manager
 kubectl label namespace $CERT_MANAGER_NS cert-manager.k8s.io/disable-validation=true --overwrite
-kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/$CERT_MANAGER_VERSION/cert-manager.crds.yaml -n $CERT_MANAGER_NS
-kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/$CERT_MANAGER_VERSION/cert-manager.yaml -n $CERT_MANAGER_NS
+# kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/$CERT_MANAGER_VERSION/cert-manager.crds.yaml
+# kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/$CERT_MANAGER_VERSION/cert-manager.yaml
+
+# Verify installation
+kubectl get pods -n $CERT_MANAGER_NS
+
+# cat <<EOF > test-resources.yaml
+# apiVersion: cert-manager.io/v1
+# kind: Issuer
+# metadata:
+#   name: test-selfsigned
+#   namespace: $CERT_MANAGER_NS
+# spec:
+#   selfSigned: {}
+# ---
+# apiVersion: cert-manager.io/v1
+# kind: Certificate
+# metadata:
+#   name: selfsigned-cert
+#   namespace: $CERT_MANAGER_NS
+# spec:
+#   dnsNames:
+#     - example.com
+#   secretName: selfsigned-cert-tls
+#   issuerRef:
+#     name: test-selfsigned
+# EOF
+
+# kubectl apply -f test-resources.yaml -n $CERT_MANAGER_NS
+# kubectl describe certificate -n $CERT_MANAGER_NS
+
+# kubectl delete -f test-resources.yaml
+# rm test-resources.yaml
 
 # Helm
 # --------------------------------------------------------------------------------------------------
@@ -54,13 +85,13 @@ kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/$CER
 # kubectl delete customresourcedefinition.apiextensions.k8s.io/certificates.cert-manager.io
 # kubectl delete customresourcedefinition.apiextensions.k8s.io/challenges.acme.cert-manager.io
 # kubectl delete customresourcedefinition.apiextensions.k8s.io/clusterissuers.cert-manager.io
-# kubectl delete -f https://github.com/jetstack/cert-manager/releases/download/$CERT_MANAGER_VERSION/cert-manager.yaml -n $CERT_MANAGER_NS
-# kubectl delete -f https://github.com/jetstack/cert-manager/releases/download/$CERT_MANAGER_VERSION/cert-manager.crds.yaml -n $CERT_MANAGER_NS
-
-# kubectl delete ns $CERT_MANAGER_NS
+# kubectl delete -f https://github.com/jetstack/cert-manager/releases/download/$CERT_MANAGER_VERSION/cert-manager.yaml
+# kubectl delete -f https://github.com/jetstack/cert-manager/releases/download/$CERT_MANAGER_VERSION/cert-manager.crds.yaml
 
 kubectl get crd,Issuers,ClusterIssuers,Certificates,CertificateRequests,Orders,Challenges --all-namespaces
 kubectl get all -n $CERT_MANAGER_NS
 
+# kubectl patch namespace $CERT_MANAGER_NS -p '{"metadata":{"finalizers":[]}}' --type='merge'
+# kubectl delete ns $CERT_MANAGER_NS
 
 cd $LAUNCH_DIR
