@@ -127,3 +127,77 @@ kubectl -n argocd get all
 
 * [jenkins git push](https://stackoverflow.com/questions/53325544/jenkins-pipeline-git-push)
 * [alternative](https://stackoverflow.com/questions/39237910/jenkins-pipeline-cannot-check-code-into-git)
+
+### Patch ArgoCD using ytt
+
+* [Patch ArgoCD using ytt](https://gist.github.com/dnmgns/040e72cdfce299a5b8c1db63004cb059)
+
+```yaml
+#@ load("@ytt:overlay", "overlay")
+#@ load("@ytt:data", "data")
+#@ load("@ytt:json", "json")
+#@ load("@ytt:base64", "base64")
+
+#! Patch Argo CD Deployment (Deployment/argocd-repo-server) and add ytt
+#@overlay/match by=overlay.subset({"kind":"Deployment","metadata":{"name":"argocd-repo-server"}})
+---
+spec:
+  template:
+    spec:
+      volumes:
+      #@overlay/append
+      - name: custom-tools
+        emptyDir: {}
+      #@overlay/match missing_ok=True
+      initContainers:
+      #@overlay/append
+      - name: download-tools
+        image: alpine:3.8
+        command: [sh, -c]
+        args:
+        - wget https://github.com/k14s/ytt/releases/download/v0.24.0/ytt-linux-amd64
+          && mv ytt-linux-amd64 /custom-tools/ytt && chmod +x /custom-tools/ytt
+        volumeMounts:
+        - mountPath: /custom-tools
+          name: custom-tools
+      containers:
+      #@overlay/match by="name"
+      - name: argocd-repo-server
+        volumeMounts:
+        #@overlay/append
+        - mountPath: /usr/local/bin/ytt
+          name: custom-tools
+          subPath: ytt
+
+# Patch Argo CD ConfigMap (ConfigMap/argocd-cm) and add ytt plugin
+#@overlay/match by=overlay.subset({"kind":"ConfigMap","metadata":{"name":"argocd-cm"}})
+#@overlay/match-child-defaults missing_ok=True
+---
+data:
+  configManagementPlugins: |
+    - name: ytt
+      generate:
+        command: ["/bin/sh", "-c"]
+        args: ["ytt -f . --ignore-unknown-comments=true --data-values-env STR_VAL --data-values-env-yaml YAML_VAL"]
+# Patch Argo CD Service (Service/argocd-server) and add metadata labels
+#@overlay/match by=overlay.subset({"kind":"Service","metadata":{"name":"argocd-server"}})
+#@overlay/match-child-defaults missing_ok=True
+---
+metadata:
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: #@ data.values.argocd_hostname
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: https
+    service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
+    service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: '*'
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: #@ data.values.certificate_arn
+    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
+spec:
+  type: LoadBalancer
+
+# Patch Argo CD Secret (Secret/argocd-secret) and add username and password:
+#@overlay/match by=overlay.subset({"kind":"Secret","metadata":{"name":"argocd-secret"}})
+#@overlay/match-child-defaults missing_ok=True
+---
+  admin.password: #@ base64.encode("{}".format(data.values.argocd_admin_pwd))
+  admin.passwordMtime: #@ base64.encode("{}".format(data.values.argocd_admin_pwd_mtime))
+```
