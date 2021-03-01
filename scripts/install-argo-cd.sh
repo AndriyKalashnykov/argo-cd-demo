@@ -1,6 +1,7 @@
 #!/bin/bash
 
-. ./set-env.sh
+LAUNCH_DIR=$(pwd); SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"; cd $SCRIPT_DIR; cd ..; SCRIPT_PARENT_DIR=$(pwd);
+. $SCRIPT_DIR/set-env.sh
 
 function get_loadbalancer_ip {
     kubectl get service $SVC_NAME -n $NS_NAME -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
